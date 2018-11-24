@@ -19,7 +19,8 @@ export default class AuthService {
     clientID: AUTH_CONFIG.clientId,
     redirectUri: AUTH_CONFIG.callbackUrl,
     responseType: 'token id_token',
-    scope: 'openid'
+    scope: 'openid',
+    audience: 'http://po-api.jv-techex.com'
   })
 
   login () {

@@ -1,8 +1,8 @@
 {
-  "name": "auth0-vue-samples",
+  "name": "po-ui",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "Auth0",
+  "author": "Jatin Vaidya",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",

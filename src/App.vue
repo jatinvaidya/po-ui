@@ -3,7 +3,7 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Auth0 - Vue</a>
+          <a class="navbar-brand" href="#">PO UI</a>
 
           <router-link :to="'/'"
             class="btn btn-primary btn-margin">
