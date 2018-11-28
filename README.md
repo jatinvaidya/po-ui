@@ -3,9 +3,16 @@
 This is a simple CRUD application for OIDC & OAuth2.0 demonstration purposes. 
 This extends the Auth0 VueJS sample application.
 
-## Getting Started
+This SPA application is essentially an **OAuth 2.0 Client Application** and **OpenID-Connect Relying Party** that accesses an **OAuth 2.0 Protected Resource Server (API)**.
 
-On Auth0 create a new client in the [dashboard](https://manage.auth0.com). Find the **domain** and **client ID** from the settings area and add the URL for your application to the **Allowed Callback URLs** box.
+## Configuration Details
+
+**OAuth 2.0 Authorization Server**: `jv-techex.auth0.com`
+**OpenID-Connect Provider**: `jv-techex.auth0.com`
+**Client Application on Auth0**: `po-ui`
+**API Application on Auth0**: `po-api` 
+
+The `src/auth/auth0-variables.js` file contains the above configuration properties.
 
 Clone the repo
 
@@ -13,10 +20,6 @@ Clone the repo
 cd po-ui
 npm install
 ```
-
-## Set the Client ID and Domain
-
-Rename the `auth0-variables.js.example` file to `auth0-variables.js` and provide the **client ID** and **domain** there. This file is located in `src/auth/`.
 
 ## Run the Application
 
