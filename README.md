@@ -7,7 +7,7 @@ This extends the Auth0 VueJS sample application.
 
 On Auth0 create a new client in the [dashboard](https://manage.auth0.com). Find the **domain** and **client ID** from the settings area and add the URL for your application to the **Allowed Callback URLs** box.
 
-Clone the repo or download it from the Vue.js quickstart page in Auth0's documentation.
+Clone the repo
 
 ```bash
 cd po-ui
@@ -24,5 +24,5 @@ Rename the `auth0-variables.js.example` file to `auth0-variables.js` and provide
 npm start dev
 ```
 
-The application will be served at `http://localhost:3000`.
+The application will be served at `http://localhost:80`.
 
