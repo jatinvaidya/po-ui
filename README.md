@@ -10,7 +10,7 @@ On Auth0 create a new client in the [dashboard](https://manage.auth0.com). Find 
 Clone the repo or download it from the Vue.js quickstart page in Auth0's documentation.
 
 ```bash
-cd 01-Login
+cd po-ui
 npm install
 ```
 
@@ -21,7 +21,7 @@ Rename the `auth0-variables.js.example` file to `auth0-variables.js` and provide
 ## Run the Application
 
 ```bash
-npm start
+npm start dev
 ```
 
 The application will be served at `http://localhost:3000`.
