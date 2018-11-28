@@ -7,10 +7,10 @@ This SPA application is essentially an **OAuth 2.0 Client Application** and **Op
 
 ## Configuration Details
 
-**OAuth 2.0 Authorization Server**: `jv-techex.auth0.com`
-**OpenID-Connect Provider**: `jv-techex.auth0.com`
-**Client Application on Auth0**: `po-ui`
-**API Application on Auth0**: `po-api` 
+**OAuth 2.0 Authorization Server**: `jv-techex.auth0.com`  
+**OpenID-Connect Provider**: `jv-techex.auth0.com`  
+**Client Application on Auth0**: `po-ui`  
+**API Application on Auth0**: `po-api`  
 
 The `src/auth/auth0-variables.js` file contains the above configuration properties.
 
