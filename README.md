@@ -14,17 +14,13 @@ This SPA application is essentially an **OAuth 2.0 Client Application** and **Op
 
 The `src/auth/auth0-variables.js` file contains the above configuration properties.
 
+## Run the Application
+
 Clone the repo
 
 ```bash
 cd po-ui
-npm install
-```
-
-## Run the Application
-
-```bash
-npm start dev
+npm install && npm run dev
 ```
 
 The application will be served at `http://localhost:80`.
