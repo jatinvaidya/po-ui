@@ -21,15 +21,15 @@
               <td>{{ order.quantity }}</td>
               <td>{{ order.comment }}</td>
               <td class="text-right">
-                <b-button @click.prevent="updateOrderPrep(order)" size="sm" variant="warning">Update</b-button>
-                <b-button @click.prevent="deleteOrder(order)" size="sm" variant="danger">Delete</b-button>
+                <b-button v-if="isSupervisor() || isExecutive()" @click.prevent="updateOrderPrep(order)" size="sm" variant="warning">Update</b-button>
+                <b-button v-if="isExecutive()" @click.prevent="deleteOrder(order)" size="sm" variant="danger">Delete</b-button>
               </td>
             </tr>
           </tbody>
         </table>
       </b-col>
       <b-col lg="3">
-        <b-card :title="(model.id ? 'Update Order' : 'Create Order')">
+        <b-card v-if="isSupervisor() || isExecutive()" :title="(model.id ? 'Update Order' : 'Create Order')">
           <form @submit.prevent="saveOrder"> 
             <b-form-group label="ID" v-if="model.id">
               <b-form-input readonly type="text" v-model="model.id"></b-form-input>
@@ -88,7 +88,7 @@ export default {
       } else {
         await restClient.createOrder(this.model)
       }
-      this.model = {} 
+      this.model = {}
       await this.refreshOrders()
     },
     async deleteOrder (id) {
@@ -99,6 +99,15 @@ export default {
         await restClient.deleteOrder(id)
         await this.refreshOrders()
       }
+    },
+    isSupervisor () {
+      return localStorage.getItem('job_title') === 'supervisor'
+    },
+    isExecutive () {
+      return localStorage.getItem('job_title') === 'executive'
+    },
+    isClerk () {
+      return localStorage.getItem('job_title') === 'clerk'
     }
   }
 }

@@ -2,6 +2,7 @@ import auth0 from 'auth0-js'
 import { AUTH_CONFIG } from './auth0-variables'
 import EventEmitter from 'eventemitter3'
 import router from './../router'
+import IdTokenVerifier from 'idtoken-verifier'
 
 export default class AuthService {
   authenticated = this.isAuthenticated()
@@ -14,6 +15,19 @@ export default class AuthService {
     this.isAuthenticated = this.isAuthenticated.bind(this)
   }
 
+  generateNonce () {
+    var bytes = new Uint8Array(16)
+    var random = window.crypto.getRandomValues(bytes)
+    var result = []
+    var charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._~'
+    random.forEach(function (c) {
+      result.push(charset[c % charset.length])
+    })
+    var nonce = result.join('')
+    localStorage.setItem('po-nonce', nonce)
+    return nonce
+  }
+
   auth0 = new auth0.WebAuth({
     domain: AUTH_CONFIG.domain,
     clientID: AUTH_CONFIG.clientId,
@@ -24,14 +38,14 @@ export default class AuthService {
   })
 
   login () {
-    this.auth0.authorize()
+    this.auth0.authorize({nonce: this.generateNonce()})
   }
 
   handleAuthentication () {
-    this.auth0.parseHash((err, authResult) => {
+    this.auth0.parseHash({nonce: localStorage.getItem('po-nonce')}, (err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult)
-        router.replace('po')
+        router.replace('home')
       } else if (err) {
         router.replace('home')
         console.log(err)
@@ -45,11 +59,28 @@ export default class AuthService {
     let expiresAt = JSON.stringify(
       authResult.expiresIn * 1000 + new Date().getTime()
     )
-    localStorage.setItem('access_token', authResult.accessToken)
-    localStorage.setItem('id_token', authResult.idToken)
-    localStorage.setItem('expires_at', expiresAt)
-    this.authNotifier.emit('authChange', { authenticated: true })
-    this.scheduleRenewal()
+
+    var verifier = new IdTokenVerifier({
+      jwksURI: AUTH_CONFIG.jwksUri,
+      issuer: AUTH_CONFIG.idTokenIssuer,
+      audience: AUTH_CONFIG.idTokenAudience
+    })
+
+    var authService = this // just aliasing to make this visible in closure
+    verifier.verify(authResult.idToken, localStorage.getItem('po-nonce'),
+      function (error, payload) {
+        if (error) {
+          console.log('error verifying id_token: ' + error)
+        } else {
+          console.log('success verifying id_token: ' + JSON.stringify(payload))
+          localStorage.setItem('access_token', authResult.accessToken)
+          localStorage.setItem('id_token', authResult.idToken)
+          localStorage.setItem('expires_at', expiresAt)
+          localStorage.setItem('job_title', payload['http://jv-techex.com/title'])
+          authService.authNotifier.emit('authChange', { authenticated: true })
+          authService.scheduleRenewal()
+        }
+      })
   }
 
   logout () {
@@ -57,6 +88,7 @@ export default class AuthService {
     localStorage.removeItem('access_token')
     localStorage.removeItem('id_token')
     localStorage.removeItem('expires_at')
+    localStorage.removeItem('po-nonce')
     this.userProfile = null
     this.authNotifier.emit('authChange', false)
     // navigate to the home route
@@ -72,7 +104,8 @@ export default class AuthService {
 
   renewToken () {
     this.auth0.authorize({
-      prompt: 'none'
+      prompt: 'none',
+      nonce: this.generateNonce()
     })
   }
 
