@@ -20,13 +20,13 @@ const router = new Router({
       component: Callback
     },
     {
-      path: '*',
-      redirect: '/home'
-    },
-    {
       path: '/po',
       name: 'PurchaseOrders',
       component: PO
+    },
+    {
+      path: '*',
+      redirect: '/home'
     }
   ]
 })

@@ -1,6 +1,7 @@
 <template>
   <div class="container-fluid mt-4">
     <h1 class="h1">Purchase Orders Management</h1>
+    <b-alert :show="loading" variant="info">Loading...</b-alert>
     <b-row>
       <b-col>
         <table class="table table-striped">
@@ -87,7 +88,7 @@ export default {
       } else {
         await restClient.createOrder(this.model)
       }
-      this.model = {} // reset form
+      this.model = {} 
       await this.refreshOrders()
     },
     async deleteOrder (id) {

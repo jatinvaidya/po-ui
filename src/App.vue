@@ -3,11 +3,15 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">PO UI</a>
 
           <router-link :to="'/'"
             class="btn btn-primary btn-margin">
               Home
+          </router-link>
+
+          <router-link :to="'/po'"
+            class="btn btn-primary btn-margin">
+              Orders
           </router-link>
 
           <button

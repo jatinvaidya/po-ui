@@ -31,7 +31,7 @@ export default class AuthService {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult)
-        router.replace('home')
+        router.replace('po')
       } else if (err) {
         router.replace('home')
         console.log(err)
@@ -49,6 +49,7 @@ export default class AuthService {
     localStorage.setItem('id_token', authResult.idToken)
     localStorage.setItem('expires_at', expiresAt)
     this.authNotifier.emit('authChange', { authenticated: true })
+    this.scheduleRenewal()
   }
 
   logout () {
@@ -67,5 +68,23 @@ export default class AuthService {
     // access token's expiry time
     let expiresAt = JSON.parse(localStorage.getItem('expires_at'))
     return new Date().getTime() < expiresAt
+  }
+
+  renewToken () {
+    this.auth0.authorize({
+      prompt: 'none'
+    })
+  }
+
+  scheduleRenewal () {
+    var expiresAt = JSON.parse(localStorage.getItem('expires_at'))
+    var delay = expiresAt - Date.now()
+    if (delay > 0) {
+      var authService = this
+      setTimeout(function () {
+        authService.renewToken()
+      }, delay)
+    }
+    console.log('access_token silent renewal scheduled after: ' + Math.round(delay / 1000 / 60) + ' mins')
   }
 }
