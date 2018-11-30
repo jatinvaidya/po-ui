@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid mt-4">
-    <h1 class="h1">Purchase Orders Management</h1>
+    <h1 class="h1">Purchase Orders Management</h1><br><br>
     <b-alert :show="loading" variant="info">Loading...</b-alert>
     <b-row>
       <b-col>
@@ -30,6 +30,7 @@
       </b-col>
       <b-col lg="3">
         <b-card v-if="isSupervisor() || isExecutive()" :title="(model.id ? 'Update Order' : 'Create Order')">
+          <br>
           <form @submit.prevent="saveOrder"> 
             <b-form-group label="ID" v-if="model.id">
               <b-form-input readonly type="text" v-model="model.id"></b-form-input>
@@ -63,7 +64,7 @@ export default {
       model: {},
       itemIdOptions: [
         { value: 'Canister Pump Filter', text: 'Canister Pump Filter' },
-        { value: 'Tricle Filter', text: 'Trickle Filter' },
+        { value: 'Trickle Filter', text: 'Trickle Filter' },
         { value: 'Under Gravel Filter', text: 'Under Gravel Filter' },
         { value: 'Heavy Duty Pump', text: 'Heavy Duty Pump' }
       ]
@@ -76,7 +77,6 @@ export default {
     async refreshOrders () {
       this.loading = true
       this.orders = await restClient.getOrders()
-      console.log('orders:' + this.orders)
       this.loading = false
     },
     async updateOrderPrep (post) {
@@ -101,13 +101,13 @@ export default {
       }
     },
     isSupervisor () {
-      return localStorage.getItem('job_title') === 'supervisor'
+      return sessionStorage.getItem('job_title') === 'supervisor'
     },
     isExecutive () {
-      return localStorage.getItem('job_title') === 'executive'
+      return sessionStorage.getItem('job_title') === 'executive'
     },
     isClerk () {
-      return localStorage.getItem('job_title') === 'clerk'
+      return sessionStorage.getItem('job_title') === 'clerk'
     }
   }
 }

@@ -2,24 +2,24 @@ var poApiBaseUrl = 'http://po-api.jv-techex.com:8080/api/v1'
 
 export default {
   async getOrders () {
-    console.log('access_token: ' + localStorage.getItem('access_token'))
+    console.log('access_token: ' + sessionStorage.getItem('access_token'))
     const res = await fetch(poApiBaseUrl + '/pos', {
       method: 'GET',
       mode: 'cors',
       headers: {
         'Accept': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        'Authorization': 'Bearer ' + sessionStorage.getItem('access_token')
       }
     })
     return res.json()
   },
   async getOrder (id) {
-    console.log('access_token: ' + localStorage.getItem('access_token'))
+    console.log('access_token: ' + sessionStorage.getItem('access_token'))
     const res = await fetch(poApiBaseUrl + '/po/' + id, {
       mode: 'cors',
       headers: {
         'Accept': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        'Authorization': 'Bearer ' + sessionStorage.getItem('access_token')
       }
     })
     return res.data
@@ -31,7 +31,7 @@ export default {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        'Authorization': 'Bearer ' + sessionStorage.getItem('access_token')
       },
       body: JSON.stringify(order)
     })
@@ -44,7 +44,7 @@ export default {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        'Authorization': 'Bearer ' + sessionStorage.getItem('access_token')
       },
       body: JSON.stringify(order)
     })
@@ -54,7 +54,7 @@ export default {
     const res = await fetch(poApiBaseUrl + '/po/' + id, {
       method: 'DELETE',
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        'Authorization': 'Bearer ' + sessionStorage.getItem('access_token')
       }
     })
     return res.data

@@ -24,7 +24,7 @@ export default class AuthService {
       result.push(charset[c % charset.length])
     })
     var nonce = result.join('')
-    localStorage.setItem('po-nonce', nonce)
+    sessionStorage.setItem('po_nonce', nonce)
     return nonce
   }
 
@@ -42,7 +42,7 @@ export default class AuthService {
   }
 
   handleAuthentication () {
-    this.auth0.parseHash({nonce: localStorage.getItem('po-nonce')}, (err, authResult) => {
+    this.auth0.parseHash({nonce: sessionStorage.getItem('po_nonce')}, (err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult)
         router.replace('home')
@@ -67,16 +67,17 @@ export default class AuthService {
     })
 
     var authService = this // just aliasing to make this visible in closure
-    verifier.verify(authResult.idToken, localStorage.getItem('po-nonce'),
+    verifier.verify(authResult.idToken, sessionStorage.getItem('po_nonce'),
       function (error, payload) {
         if (error) {
           console.log('error verifying id_token: ' + error)
         } else {
           console.log('success verifying id_token: ' + JSON.stringify(payload))
-          localStorage.setItem('access_token', authResult.accessToken)
-          localStorage.setItem('id_token', authResult.idToken)
-          localStorage.setItem('expires_at', expiresAt)
-          localStorage.setItem('job_title', payload['http://jv-techex.com/title'])
+          sessionStorage.setItem('access_token', authResult.accessToken)
+          sessionStorage.setItem('id_token', authResult.idToken)
+          sessionStorage.setItem('expires_at', expiresAt)
+          sessionStorage.setItem('job_title', payload['http://jv-techex.com/title'].toLowerCase())
+          sessionStorage.setItem('nickname', payload['http://jv-techex.com/nickName'])
           authService.authNotifier.emit('authChange', { authenticated: true })
           authService.scheduleRenewal()
         }
@@ -85,10 +86,12 @@ export default class AuthService {
 
   logout () {
     // Clear access token and ID token from local storage
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('id_token')
-    localStorage.removeItem('expires_at')
-    localStorage.removeItem('po-nonce')
+    sessionStorage.removeItem('access_token')
+    sessionStorage.removeItem('id_token')
+    sessionStorage.removeItem('expires_at')
+    sessionStorage.removeItem('po_nonce')
+    sessionStorage.removeItem('nickname')
+    sessionStorage.removeItem('job_title')
     this.userProfile = null
     this.authNotifier.emit('authChange', false)
     // navigate to the home route
@@ -98,7 +101,7 @@ export default class AuthService {
   isAuthenticated () {
     // Check whether the current time is past the
     // access token's expiry time
-    let expiresAt = JSON.parse(localStorage.getItem('expires_at'))
+    let expiresAt = JSON.parse(sessionStorage.getItem('expires_at'))
     return new Date().getTime() < expiresAt
   }
 
@@ -110,7 +113,7 @@ export default class AuthService {
   }
 
   scheduleRenewal () {
-    var expiresAt = JSON.parse(localStorage.getItem('expires_at'))
+    var expiresAt = JSON.parse(sessionStorage.getItem('expires_at'))
     var delay = expiresAt - Date.now()
     if (delay > 0) {
       var authService = this
