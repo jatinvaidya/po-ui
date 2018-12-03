@@ -68,6 +68,12 @@ Verification includes:
 <br>
 <br>
 
+## Logout
+
+Authenticated user may choose to `logout` by clicking the logout button which will do the following:
+- End SPA session by clearing browser `session storage` of `access_token`, `id_token` and any other temporary data
+- End Auth0 session by calling Auth0 `logout` API and redirect the user back to `/home`
+
 ## Running Locally
 <hr>
 

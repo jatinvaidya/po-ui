@@ -22,7 +22,7 @@
               <td>{{ order.comment }}</td>
               <td class="text-right">
                 <b-button v-if="isSupervisor() || isExecutive()" @click.prevent="updateOrderPrep(order)" size="sm" variant="warning">Update</b-button>
-                <b-button v-if="isExecutive()" @click.prevent="deleteOrder(order)" size="sm" variant="danger">Delete</b-button>
+                <b-button v-if="isExecutive()" @click.prevent="deleteOrder(order.id)" size="sm" variant="danger">Delete</b-button>
               </td>
             </tr>
           </tbody>

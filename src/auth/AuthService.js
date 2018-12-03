@@ -94,6 +94,11 @@ export default class AuthService {
     sessionStorage.removeItem('job_title')
     this.userProfile = null
     this.authNotifier.emit('authChange', false)
+
+    this.auth0.logout({
+      returnTo: 'http://po-ui.jv-techex.com/home'
+    })
+
     // navigate to the home route
     router.replace('home')
   }
