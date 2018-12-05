@@ -13,6 +13,7 @@ This is a simple CRUD application for OIDC & OAuth2.0 demonstration purposes. Th
 |OpenID-Connect Provider       | `jv-techex.auth0.com` | 
 |Client Application on Auth0   | `po-ui`               |
 |API Application on Auth0      | `po-api`              |
+|OIDC flow type                | `implicit`            |
 
 The `src/auth/auth0-variables.js` file contains the above configuration properties.
 <br>
@@ -67,6 +68,15 @@ Verification includes:
 - nonce
 <br>
 <br>
+
+## access_token renewal
+<hr>
+
+If the access_token expires, the user if still actively working on the application interface, will face interruption
+as the SPA will no longer be able to call the po-api on behalf of the user. We need to renew the access_token just before expiration.
+Also, since we are using `implicit` grant, we do not have `refresh_token` which can be used for renewing `access_token`. 
+Therefore, we use a workaround by silently sending a new authorization request with `prompt=none` which means if the Auth0 session cookie
+is still active then we will ge a new `access_token`.
 
 ## Logout
 
