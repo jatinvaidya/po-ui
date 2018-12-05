@@ -1,3 +1,6 @@
+<!-- 
+  This is component corresponding to app home/landing/welcome page
+-->
 <template>
   <div>
     <h1>Purchase Order Management</h1>
@@ -6,7 +9,7 @@
         <div>
           Welcome, <b-badge variant="primary"> {{ nickname() }} </b-badge>!<br><br>
           As a <b-badge variant="success"> {{ title() }} </b-badge>,
-          you can <b-badge variant="dark"> {{ privileges() }} </b-badge><b-link to='po'> Orders</b-link> 
+          you are authorized to <b-badge variant="dark"> {{ privileges() }} </b-badge><b-link to='po'> Orders</b-link> 
         </div>
     </h4>
     <h4 v-if="!authenticated">
@@ -19,11 +22,8 @@
   export default {
     name: 'home',
     props: ['auth', 'authenticated'],
-    data () {
-      return {
-      }
-    },
     methods: {
+      // list of privileges based on job_title claim in id_token
       privileges () {
         var title = sessionStorage.getItem('job_title')
         var priv = ''
@@ -40,9 +40,11 @@
         }
         return priv
       },
+      // nickname claim from id_token
       nickname () {
         return sessionStorage.getItem('nickname')
       },
+      // title claim from id_token
       title () {
         return sessionStorage.getItem('job_title')
       }

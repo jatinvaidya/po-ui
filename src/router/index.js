@@ -6,6 +6,15 @@ import PO from '@/components/PO'
 
 Vue.use(Router)
 
+// need to re-use this function from AuthService.js
+// instead of repeating here
+function isAuthenticated () {
+  let expiresAt = JSON.parse(sessionStorage.getItem('expires_at'))
+  return new Date().getTime() < expiresAt
+}
+
+// configure routes
+// mapped component will replace <router-view> tag in template
 const router = new Router({
   mode: 'history',
   routes: [
@@ -22,7 +31,18 @@ const router = new Router({
     {
       path: '/po',
       name: 'PurchaseOrders',
-      component: PO
+      component: PO,
+      // user must be authenticated before navigating to orders
+      beforeEnter: (to, from, next) => {
+        if (isAuthenticated()) {
+          console.log('Authenticated user, continue to orders')
+          next()
+        } else {
+          // better to display this on UI instead
+          console.log('Please login first')
+          next('/home')
+        }
+      }
     },
     {
       path: '*',

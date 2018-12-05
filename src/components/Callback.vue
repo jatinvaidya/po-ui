@@ -1,3 +1,8 @@
+<!-- 
+  This is component corresponding to OAuth 2.0 redirect_uri
+  There are no display items, this simply calls handleAuthenticationfunction 
+  to parse and process the hash fragments
+-->
 <template>
   <div class="spinner">
     <img src="../assets/loading.svg" alt="loading"/>

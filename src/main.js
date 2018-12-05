@@ -1,5 +1,5 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+// this is the entry point for loading the SPA
+// main.js is referenced in webpack.base.config.js
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -7,7 +7,10 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+// use bootstrap for styling
 Vue.use(BootstrapVue)
+
+// not a production app yet
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

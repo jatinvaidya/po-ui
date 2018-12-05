@@ -1,3 +1,9 @@
+<!-- 
+  This is component corresponding to business functionality (CRUD orders)
+  It calls out o backend CRUD API (po-api) using rest-client.js service.
+  It also does access control at UI layer by hiding DOM controls corresponding to 
+  functionality the user is not authorized to, based on their job title.
+-->
 <template>
   <div class="container-fluid mt-4">
     <h1 class="h1">Purchase Orders Management</h1><br><br>
