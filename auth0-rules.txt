@@ -1,0 +1,37 @@
+// RULE - Enrich ID token with Title and Nickname Claims
+function (user, context, callback) {
+  // apply rule only to users of po-api
+  if(user.app_metadata.po_api_user) {
+    console.log('title: ' + user.app_metadata.title);
+    context.idToken['http://jv-techex.com/title'] = user.app_metadata.title;
+    context.idToken['http://jv-techex.com/nickName'] = user.user_metadata.preferred_name;
+  }
+  callback(null, user, context);
+}
+
+
+// RULE - Check Access Token for Authorized Scopes
+function (user, context, callback) {
+  // apply this rule only to users of po-api
+  if(user.app_metadata.po_api_user) {
+    var title = user.app_metadata.title;
+    var currentScopes = context.request.query.scope.split(" ");
+    var allowedScopes = [];
+    // title wise scope mapping
+    if(title === 'clerk') {
+        allowedScopes = ['po:read'];
+    } else if(title === 'supervisor') {
+        allowedScopes = ['po:read', 'po:write'];
+    } else if(title === 'executive') {
+        allowedScopes = ['po:read', 'po:write', 'po:delete'];
+    }
+    // enforce above mapping
+    var resultantScopes = currentScopes.filter(item => {
+        // do not control any scopes other than po: scopes
+        return !item.startsWith('po:') || allowedScopes.includes(item);
+    });
+    context.accessToken.scope = resultantScopes;
+  }
+  callback(null, user, context);
+}
+
